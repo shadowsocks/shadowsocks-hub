@@ -1,0 +1,48 @@
+<div layout="column">
+    <div flex="20" style="min-height: 120px; height: 120px;"></div>
+    <div layout="row" layout-align="center center">
+        <md-card style="min-width: 50vw;">
+            <md-toolbar>
+                <div class="md-toolbar-tools" layout-align="start center">Edit account</div>
+            </md-toolbar>
+            <md-card-content layout="row" layout-align="center center">
+                <div flex="30" layout="row" layout-align="center center" layout-margin hide-xs hide-sm>
+                    <img src="/favicon.png" style="width: 100%;"></img>
+                </div>
+                <div flex>
+                    <div flex layout="row">
+                        <div flex="10"></div>
+                        <div flex layout="column" layout-align="space-around stretch">
+                            <form name="editAccountForm">
+                                <md-input-container class="md-block">
+                                    <label>Port:</label>
+                                    <input type="number" name="port" ng-model="account.port" min="1" max="65535" required>
+                                    <div ng-messages="editAccountForm.port.$error">
+                                        <div ng-message="required">required</div>
+                                        <div ng-message="min || max">must be between 1 and 65535</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container class="md-block">
+                                    <label>Password:</label>
+                                    <input type="password" required name="password" ng-model="account.password">
+                                    <div ng-messages="editAccountForm.password.$error">
+                                        <div ng-message="required">required</div>
+                                    </div>
+                                </md-input-container>
+                            </form>
+                        </div>
+                        <div flex="10"></div>
+                    </div>
+                    <div flex layout="row" layout-align="center start">
+                        <div flex="10"></div>
+                        <div layout="row" flex layout-align="space-around center">
+                            <md-button class="md-accent" ng-click="cancel()">Cancel</md-button>
+                            <md-button class="md-raised md-accent" ng-disabled="editAccountForm.$invalid || !editAccountForm.$dirty" ng-click="confirm()">Confirm</md-button>
+                        </div>
+                        <div flex="10"></div>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

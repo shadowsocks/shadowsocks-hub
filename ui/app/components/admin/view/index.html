@@ -1,0 +1,1002 @@
+<div class="elements">
+
+    <md-toolbar>
+        <div class="md-toolbar-tools" layout-align="space-between center">
+            <div class="md-toolbar-tools" layout-align="start center">Shadowsocks Hub</div>
+            <md-menu md-offset="0 50">
+                <md-button ng-click="$mdMenu.open()">
+                    <md-icon class="material-icons">person</md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button ng-click="editAdmin()">
+                            <md-icon class="material-icons" style="color:#FF6E40;">autorenew</md-icon>
+                            Update
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-divider></md-menu-divider>
+                    <md-menu-item>
+                        <md-button ng-click="logout()">
+                            <md-icon class="material-icons" style="color:#FF6E40;">power_settings_new</md-icon>
+                            Log out
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-toolbar>
+
+    <div class="elementDivider">
+        <div ng-if="doesShowElementDivider">
+            <div>
+                <div class="md-toolbar-tools" layout-align="space-between center">
+                    <md-button class="md-fab md-accent" ng-click="close(displayCache.getNewElementOrder() - 1)">
+                        <md-tooltip md-direction="top">
+                            Back
+                        </md-tooltip>
+                        <md-icon class="material-icons" md-colors="{color: 'primary'}">chevron_left</md-icon>
+                    </md-button>
+                    <md-menu-bar>
+                        <md-menu>
+                            <md-button class="md-fab md-accent" ng-click="$mdMenu.open()">
+                                <md-tooltip md-direction="top">
+                                    More
+                                </md-tooltip>
+                                <md-icon class="material-icons" md-colors="{color: 'primary'}">expand_more</md-icon>
+                            </md-button>
+                            <md-menu-content width="4">
+                                <md-menu-item>
+                                    <md-menu md-offset="0 50">
+                                        <md-button ng-click="$mdMenu.open()">
+                                            <md-icon class="material-icons" style="color:#FF6E40;">sort</md-icon>
+                                            Sort by
+                                        </md-button>
+                                        <md-menu-content width="4">
+                                            <md-menu-item ng-repeat="criterion in sortCriteria">
+                                                <md-button ng-click="displayCache.sortLeafElement(criterion)">{{criterion}}</md-button>
+                                            </md-menu-item>
+                                        </md-menu-content>
+                                    </md-menu>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </md-menu-bar>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="menu">
+        <div layout="row" ng-if="doesShowMenu" layout-wrap layout-align="center center">
+            <div ng-repeat="menuItem in menu.items track by menuItem.id">
+                <div ng-if="isMenuItemVisible[menuItem.id]">
+                    <md-card style="min-height: 20vh; min-width: 20vw;" layout-align="center center" ng-click="menuClick(menuItem.id, menu.elementOrder)"
+                        md-colors="{background: 'primary-100'}">
+                        <md-card-header>
+                            <md-card-header-text layout-align="center center">
+                                <span class="md-title" translate>{{menuItem.name}}</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="servers">
+        <div layout="row" ng-if="doesShowServers" layout-wrap layout-align="center center">
+            <div ng-repeat="server in servers.items track by server.id">
+                <div ng-if="isServerVisible[server.id]">
+                    <md-card style="min-height: 20vh; min-width: 20vw;" md-colors="{background: 'primary-100'}">
+                        <md-card-header>
+                            <md-card-header-text layout-align="center center">
+                                <span class="md-title">{{server.ipAddressOrDomainName}}</span>
+                                <span class="md-subhead">Created {{server.createdTime | timeago}}</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-actions layout="column" layout-align="center center">
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showServerNodes(server.id, servers.elementOrder)"
+                                        ng-if="isShowServerNodeButtonVisible[server.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Server Nodes
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">donut_small</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(servers.elementOrder + 1)" ng-if="!isShowServerNodeButtonVisible[server.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Server Nodes
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite">donut_small</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showServerAccounts(server.id, servers.elementOrder)"
+                                        ng-if="isShowServerAccountButtonVisible[server.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Server Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">account_balance_wallet</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(servers.elementOrder + 1)" ng-if="!isShowServerAccountButtonVisible[server.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Server Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">account_balance_wallet</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showServerUsers(server.id, servers.elementOrder)"
+                                        ng-if="isShowServerUserButtonVisible[server.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Server Users
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">person</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(servers.elementOrder + 1)" ng-if="!isShowServerUserButtonVisible[server.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Server Users
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">person</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showServerTraffic(server.id, servers.elementOrder)"
+                                        ng-if="isShowServerTrafficButtonVisible[server.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Server Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">equalizer</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(servers.elementOrder + 1)" ng-if="!isShowServerTrafficButtonVisible[server.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Server Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">equalizer</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="editServer(server)">
+                                        <md-tooltip md-direction="top">
+                                            Edit Server
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">edit</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="deleteServer(server)">
+                                        <md-tooltip md-direction="top">
+                                            Delete Server
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">delete_forever</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+            <md-card layout-align="center center" ng-if="servers.isAddingVisible" md-colors="{background: 'primary-100'}">
+                <md-card-actions layout="row" layout-align="center center">
+                    <md-button class="md-fab md-mini md-accent" ng-click="addServer()">
+                        <md-tooltip md-direction="top">
+                            Add Server
+                        </md-tooltip>
+                        <md-icon class="material-icons" md-colors="{color: 'primary'}">add_box</md-icon>
+                    </md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+    </div>
+
+    <div class="nodes">
+        <div layout="row" ng-if="doesShowNodes" layout-wrap layout-align="center center">
+            <div ng-repeat="node in nodes.items track by node.id">
+                <div ng-if="isNodeVisible[node.id]">
+                    <md-card style="min-height: 20vh; min-width: 20vw;" md-colors="{background: 'primary-100'}">
+                        <md-card-header>
+                            <md-card-header-text layout-align="center center">
+                                <span class="md-title">{{node.name}}</span>
+                                <span class="md-subhead">Created {{node.createdTime | timeago}}</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-content layout="column">
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Protocol:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{node.protocol}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Server:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{node.server.ipAddressOrDomainName}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Port:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{node.port}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Password:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{node.password}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Comment:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{node.comment}}</div>
+                            </div>
+                        </md-card-content>
+                        <md-card-actions layout="column" layout-align="center center">
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showNodeServer(node.id, nodes.elementOrder)" ng-if="isShowNodeServerButtonVisible[node.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Node Server
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">cloud</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(nodes.elementOrder + 1)" ng-if="!isShowNodeServerButtonVisible[node.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Node Server
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">cloud</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showNodeAccounts(node.id, nodes.elementOrder)"
+                                        ng-if="isShowNodeAccountButtonVisible[node.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Node Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">account_balance_wallet</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(nodes.elementOrder + 1)" ng-if="!isShowNodeAccountButtonVisible[node.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Node Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">account_balance_wallet</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showNodeUsers(node.id, nodes.elementOrder)" ng-if="isShowNodeUserButtonVisible[node.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Node Users
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">person</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(nodes.elementOrder + 1)" ng-if="!isShowNodeUserButtonVisible[node.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Node Users
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">person</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showNodeTraffic(node.id, nodes.elementOrder)" ng-if="isShowNodeTrafficButtonVisible[node.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Node Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">equalizer</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(nodes.elementOrder + 1)" ng-if="!isShowNodeTrafficButtonVisible[node.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Node Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">equalizer</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="editNode(node)">
+                                        <md-tooltip md-direction="top">
+                                            Edit Node
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">edit</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="deleteNode(node)">
+                                        <md-tooltip md-direction="top">
+                                            Delete Node
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">delete_forever</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+            <md-card layout-align="center center" ng-if="nodes.isAddingVisible" md-colors="{background: 'primary-100'}">
+                <md-card-actions layout="row" layout-align="center center">
+                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="addNode()">
+                        <md-tooltip md-direction="top">
+                            Add Node
+                        </md-tooltip>
+                        <md-icon class="material-icons" md-colors="{color: 'primary'}">add_box</md-icon>
+                    </md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+    </div>
+
+    <div class="accounts">
+        <div layout="row" ng-if="doesShowAccounts" layout-wrap layout-align="center center">
+            <div ng-repeat="account in accounts.items track by account.id">
+                <div ng-if="isAccountVisible[account.id]">
+                    <md-card style="min-height: 20vh; min-width: 20vw;" md-colors="{background: 'primary-100'}">
+                        <md-card-header>
+                            <md-card-header-text layout-align="center center">
+                                <span class="md-title">{{account.port}}</span>
+                                <span class="md-subhead">Created {{account.createdTime | timeago}}</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-content layout="column">
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>User:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{account.purchase.user.email}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Node:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{account.node.name}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Port:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{account.port}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Password:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{account.password}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Encryption:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{account.method}}</div>
+                            </div>
+                        </md-card-content>
+                        <md-card-actions layout="column" layout-align="center center">
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showAccountServer(account.id, accounts.elementOrder)"
+                                        ng-if="isShowAccountServerButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Account Server
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">cloud</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(accounts.elementOrder + 1)" ng-if="!isShowAccountServerButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Account Server
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">cloud</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showAccountNode(account.id, accounts.elementOrder)"
+                                        ng-if="isShowAccountNodeButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Account Node
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">donut_small</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(accounts.elementOrder + 1)" ng-if="!isShowAccountNodeButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Account Node
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">donut_small</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showAccountProduct(account.id, accounts.elementOrder)"
+                                        ng-if="isShowAccountProductButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Account Product
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">shopping_cart</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(accounts.elementOrder + 1)" ng-if="!isShowAccountProductButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Account Product
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">shopping_cart</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showAccountPurchase(account.id, accounts.elementOrder)"
+                                        ng-if="isShowAccountPurchaseButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Account Request
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">pan_tool</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(accounts.elementOrder + 1)" ng-if="!isShowAccountPurchaseButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Account Request
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">pan_tool</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showAccountUser(account.id, accounts.elementOrder)"
+                                        ng-if="isShowAccountUserButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Account User
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">person</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(accounts.elementOrder + 1)" ng-if="!isShowAccountUserButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Account User
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">person</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showAccountQrCode(account.id, accounts.elementOrder)"
+                                        ng-if="isShowAccountQrCodeButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Account QR Code
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">select_all</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(accounts.elementOrder + 1)" ng-if="!isShowAccountQrCodeButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Account QR Code
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">select_all</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showAccountTraffic(account.id, accounts.elementOrder)"
+                                        ng-if="isShowAccountTrafficButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Account Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">equalizer</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(accounts.elementOrder + 1)" ng-if="!isShowAccountTrafficButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Account Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">equalizer</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="deleteAccount(account)">
+                                        <md-tooltip md-direction="top">
+                                            Delete Account
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">delete_forever</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+            <md-card layout-align="center center" ng-if="accounts.isAddingVisible" md-colors="{background: 'primary-100'}">
+                <md-card-actions layout="row" layout-align="center center">
+                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="addAccount()">
+                        <md-tooltip md-direction="top">
+                            Add Account
+                        </md-tooltip>
+                        <md-icon class="material-icons" md-colors="{color: 'primary'}">add_box</md-icon>
+                    </md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+    </div>
+
+    <div class="traffic">
+        <div ng-if="doesShowTrafficChart" layout-align="center center">
+            <md-card md-colors="{background: 'primary-100'}">
+                <md-card-header>
+                    <md-card-header-text layout-align="center center">
+                    </md-card-header-text>
+                </md-card-header>
+                <md-card-content>
+                    <div flex layout="row" layout-align="center center" style="margin-bottom: 15px;">
+                        <md-radio-group ng-model="$parent.period" ng-change="changeTrafficChartPeriod()" layout="row" layout-align="center center">
+                            <md-radio-button value="hour">Hour</md-radio-button>
+                            <md-radio-button value="day">Day</md-radio-button>
+                            <md-radio-button value="week">Week</md-radio-button>
+                            <md-radio-button value="month">Month</md-radio-button>
+                            <md-radio-button value="quarter">Quarter</md-radio-button>
+                            <md-radio-button value="year">Year</md-radio-button>
+                        </md-radio-group>
+                    </div>
+
+                    <div layout="row" layout-wrap layout-align="center center">
+
+                        <canvas id="line" width="{{getChartSize().line[0]}}" height="{{getChartSize().line[1]}}" class="chart chart-line" chart-data="data"
+                            chart-labels="labels" chart-series="series" chart-options="options">
+                        </canvas>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+
+    <div class="products">
+        <div layout="row" ng-if="doesShowProducts" layout-wrap layout-align="center center">
+            <div ng-repeat="product in products.items track by product.id">
+                <div ng-if="isProductVisible[product.id]">
+                    <md-card style="min-height: 20vh; min-width: 20vw;" md-colors="{background: 'primary-100'}">
+                        <md-card-header>
+                            <md-card-header-text layout-align="center center">
+                                <span class="md-title">{{product.name}}</span>
+                                <span class="md-subhead">Created {{product.createdTime | timeago}}</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-content layout="column">
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Period:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{product.period}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Traffic:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{product.traffic | flow}}</div>
+                            </div>
+                        </md-card-content>
+                        <md-card-actions layout="column" layout-align="center center">
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showProductAccounts(product.id, products.elementOrder)"
+                                        ng-if="isShowProductAccountButtonVisible[product.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Product Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">account_balance_wallet</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(products.elementOrder + 1)" ng-if="!isShowProductAccountButtonVisible[product.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Product Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">account_balance_wallet</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showProductUsers(product.id, products.elementOrder)"
+                                        ng-if="isShowProductUserButtonVisible[product.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Product Users
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">person</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(products.elementOrder + 1)" ng-if="!isShowProductUserButtonVisible[product.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Product Users
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">person</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showProductPurchases(product.id, products.elementOrder)"
+                                        ng-if="isShowProductPurchaseButtonVisible[product.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Product Requests
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">pan_tool</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(products.elementOrder + 1)" ng-if="!isShowProductPurchaseButtonVisible[product.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Product Requests
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">pan_tool</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="editProduct(product)">
+                                        <md-tooltip md-direction="top">
+                                            Edit Product
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">edit</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="deleteProduct(product)">
+                                        <md-tooltip md-direction="top">
+                                            Delete Product
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">delete_forever</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+            <md-card layout-align="center center" ng-if="products.isAddingVisible" md-colors="{background: 'primary-100'}">
+                <md-card-actions layout="row" layout-align="center center">
+                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="addProduct()">
+                        <md-tooltip md-direction="top">
+                            Add Product
+                        </md-tooltip>
+                        <md-icon class="material-icons" md-colors="{color: 'primary'}">add_box</md-icon>
+                    </md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+    </div>
+
+    <div class="purchases">
+        <div layout="row" ng-if="doesShowPurchases" layout-wrap layout-align="center center">
+            <div ng-repeat="purchase in purchases.items track by purchase.id">
+                <div ng-if="isPurchaseVisible[purchase.id]">
+                    <md-card style="min-height: 20vh; min-width: 20vw;" md-colors="{background: 'primary-100'}">
+                        <md-card-header>
+                            <md-card-header-text layout-align="center center">
+                                <span class="md-title">{{purchase.user.email}}</span>
+                                <span class="md-subhead">Created {{purchase.createdTime | timeago}}</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-content layout="column">
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>User:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{purchase.user.email}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Product:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{purchase.product.name}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Status:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{purchase.payment.state}}</div>
+                            </div>
+                        </md-card-content>
+                        <md-card-actions layout="column" layout-align="center center">
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showPurchaseAccounts(purchase.id, purchases.elementOrder)"
+                                        ng-if="isShowPurchaseAccountButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Request Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">account_balance_wallet</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(purchases.elementOrder + 1)" ng-if="!isShowPurchaseAccountButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Request Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">account_balance_wallet</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showPurchaseProduct(purchase.id, purchases.elementOrder)"
+                                        ng-if="isShowPurchaseProductButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Request Product
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">shopping_cart</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(purchases.elementOrder + 1)" ng-if="!isShowPurchaseProductButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Request Product
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">shopping_cart</md-icon>
+                                    </md-button>
+                                </div>
+                                <!--
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showPurchasePayment(purchase.id, purchases.elementOrder)" ng-if="isShowPurchasePaymentButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Request Payment
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">monetization_on</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(purchases.elementOrder + 1)" ng-if="!isShowPurchasePaymentButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Request Payment
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">monetization_on</md-icon>
+                                    </md-button>
+                                </div>
+                                -->
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showPurchaseUser(purchase.id, purchases.elementOrder)"
+                                        ng-if="isShowPurchaseUserButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Request User
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">person</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(purchases.elementOrder + 1)" ng-if="!isShowPurchaseUserButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Request User
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">person</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showPurchaseTraffic(purchase.id, purchases.elementOrder)"
+                                        ng-if="isShowPurchaseTrafficButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Request Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">equalizer</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(purchases.elementOrder + 1)" ng-if="!isShowPurchaseTrafficButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Request Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">equalizer</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-if="purchase.payment.state !== 'completed'" ng-click="approve(purchase)">
+                                        <md-tooltip md-direction="top">
+                                            Approve Request
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">done</md-icon>
+                                    </md-button>
+                                </div>
+                                <!--
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="deletePurchase(purchase)">
+                                        <md-tooltip md-direction="top">
+                                            Delete Request
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">delete_forever</md-icon>
+                                    </md-button>
+                                </div>
+                                -->
+                            </div>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+            <md-card layout-align="center center" ng-if="purchases.isAddingVisible" md-colors="{background: 'primary-100'}">
+                <md-card-actions layout="row" layout-align="center center">
+                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="addPurchase()">
+                        <md-tooltip md-direction="top">
+                            Add Request
+                        </md-tooltip>
+                        <md-icon class="material-icons" md-colors="{color: 'primary'}">add_box</md-icon>
+                    </md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+    </div>
+
+    <!--
+    <div class="payments">
+        <div layout="row" ng-if="doesShowPayments" layout-wrap layout-align="center center">
+            <div ng-repeat="payment in payments.items track by payment.id">
+                <div ng-if="isPaymentVisible[payment.id]">
+                    <md-card style="min-height: 20vh; min-width: 20vw;" md-colors="{background: 'primary-100'}">
+                        <md-card-header>
+                            <md-card-header-text layout-align="center center">
+                                <span class="md-title">Approval {{payment.createdTime}}</span>
+                                <span class="md-subhead">Created {{payment.createdTime | timeago}}</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-content layout="column">
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>State:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{payment.state}}</div>
+                            </div>
+                        </md-card-content>
+                        <md-card-actions layout="column" layout-align="center center">
+                            <div layout="row">
+                                <div>
+                                    <md-button md-no-ink class="md-accent" ng-click="showPaymentAccounts(payment.id, payments.elementOrder)" ng-if="isShowPaymentAccountButtonVisible[payment.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Payment Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">account_balance_wallet</md-icon>
+                                    </md-button>
+                                    <md-button md-no-ink class="md-accent" ng-click="close(payments.elementOrder + 1)" ng-if="!isShowPaymentAccountButtonVisible[payment.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Payment Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">account_balance_wallet</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button md-no-ink class="md-accent" ng-click="showPaymentUser(payment.id, payments.elementOrder)" ng-if="isShowPaymentUserButtonVisible[payment.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Payment User
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">person</md-icon>
+                                    </md-button>
+                                    <md-button md-no-ink class="md-accent" ng-click="close(payments.elementOrder + 1)" ng-if="!isShowPaymentUserButtonVisible[payment.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Payment User
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">person</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </div>
+-->
+
+    <div class="users">
+        <div layout="row" ng-if="doesShowUsers" layout-wrap layout-align="center center">
+            <div ng-repeat="user in users.items track by user.id">
+                <div ng-if="isUserVisible[user.id]">
+                    <md-card style="min-height: 20vh; min-width: 20vw;" md-colors="{background: 'primary-100'}">
+                        <md-card-header>
+                            <md-card-header-text layout-align="center center">
+                                <span class="md-title">{{user.email}}</span>
+                                <span class="md-subhead">Created {{user.createdTime | timeago}}</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-actions layout="column" layout-align="center center">
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showUserAccounts(user.id, users.elementOrder)"
+                                        ng-if="isShowUserAccountButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show User Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">account_balance_wallet</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(users.elementOrder + 1)" ng-if="!isShowUserAccountButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide User Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">account_balance_wallet</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showUserPurchases(user.id, users.elementOrder)"
+                                        ng-if="isShowUserPurchaseButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show User Requests
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">pan_tool</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(users.elementOrder + 1)" ng-if="!isShowUserPurchaseButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide User Requests
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">pan_tool</md-icon>
+                                    </md-button>
+                                </div>
+                                <!--
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showUserPayments(user.id, users.elementOrder)" ng-if="isShowUserPaymentButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show User Payments
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">monetization_on</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(users.elementOrder + 1)" ng-if="!isShowUserPaymentButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide User Payments
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">monetization_on</md-icon>
+                                    </md-button>
+                                </div>
+                                -->
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showUserProducts(user.id, users.elementOrder)"
+                                        ng-if="isShowUserProductButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show User Products
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">shopping_cart</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(users.elementOrder + 1)" ng-if="!isShowUserProductButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide User Products
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">shopping_cart</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showUserNodes(user.id, users.elementOrder)" ng-if="isShowUserNodeButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show User Nodes
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">donut_small</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(users.elementOrder + 1)" ng-if="!isShowUserNodeButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide User Nodes
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">donut_small</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showUserServers(user.id, users.elementOrder)" ng-if="isShowUserServerButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show User Servers
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">cloud</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(users.elementOrder + 1)" ng-if="!isShowUserServerButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide User Servers
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">cloud</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showUserTraffic(user.id, users.elementOrder)" ng-if="isShowUserTrafficButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show User Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">equalizer</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(users.elementOrder + 1)" ng-if="!isShowUserTrafficButtonVisible[user.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide User Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">equalizer</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="editUser(user)">
+                                        <md-tooltip md-direction="top">
+                                            Edit User
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">edit</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="deleteUser(user)">
+                                        <md-tooltip md-direction="top">
+                                            Delete User
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">delete_forever</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+            <md-card layout-align="center center" ng-if="users.isAddingVisible" md-colors="{background: 'primary-100'}">
+                <md-card-actions layout="row" layout-align="center center">
+                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="addUser()">
+                        <md-tooltip md-direction="top">
+                            Add User
+                        </md-tooltip>
+                        <md-icon class="material-icons" md-colors="{color: 'primary'}">add_box</md-icon>
+                    </md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+    </div>
+
+    <div class="qrcode">
+        <div layout="row" ng-if="doesShowQrcode" layout-wrap layout-align="center center">
+            <md-card md-colors="{background: 'primary-100'}">
+                <md-card-content>
+                    <div flex layout="row" layout-align="center center">
+                        <qr layout-margin text="qrcodeSsAddress" image="true"></qr>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+</div>

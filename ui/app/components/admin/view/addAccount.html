@@ -1,0 +1,50 @@
+<div layout="column">
+    <div flex="20" style="min-height: 120px; height: 120px;"></div>
+    <div layout="row" layout-align="center center">
+        <md-card style="min-width: 50vw;">
+            <md-toolbar>
+                <div class="md-toolbar-tools" layout-align="start center">Add account</div>
+            </md-toolbar>
+            <md-card-content layout="row" layout-align="center center">
+                <div flex="30" layout="row" layout-align="center center" layout-margin hide-xs hide-sm>
+                    <img src="/favicon.png" style="width: 100%;"></img>
+                </div>
+                <div flex>
+                    <div flex layout="row">
+                        <div flex="10"></div>
+                        <div flex layout="column" layout-align="space-around stretch">
+                            <form name="addAccountForm">
+                                <md-input-container class="md-block">
+                                    <label>Node:</label>
+                                    <div layout="row">
+                                        <md-select required ng-model="account.nodeId" flex="100">
+                                            <md-option ng-repeat="node in allNodes" value="{{node.id}}">{{node.name}}</md-option>
+                                        </md-select>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container class="md-block">
+                                    <label>Request:</label>
+                                    <div layout="row">
+                                        <md-select required ng-model="account.purchaseId" flex="100">
+                                            <md-option ng-repeat="purchase in allPurchases" value="{{purchase.id}}">User: {{purchase.user.email}}; Product: {{purchase.product.name}}; Created Time:
+                                                {{purchase.createdTime | date:'yyyy-MM-dd HH:mm:ss Z'}}</md-option>
+                                        </md-select>
+                                    </div>
+                                </md-input-container>
+                            </form>
+                        </div>
+                        <div flex="10"></div>
+                    </div>
+                    <div flex layout="row" layout-align="center start">
+                        <div flex="10"></div>
+                        <div layout="row" flex layout-align="space-around center">
+                            <md-button class="md-accent" ng-click="cancel()">Cancel</md-button>
+                            <md-button class="md-raised md-accent" ng-disabled="addAccountForm.$invalid" ng-click="add()">Add</md-button>
+                        </div>
+                        <div flex="10"></div>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

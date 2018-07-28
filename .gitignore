@@ -1,0 +1,26 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Mac DS_Store
+.DS_Store
+
+# Dependency directories
+node_modules
+
+# Optional npm cache directory
+.npm
+
+# Application environment
+.env
+
+# CA certificate
+ca.*
+server.*
+

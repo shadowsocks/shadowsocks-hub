@@ -1,0 +1,27 @@
+<div layout="row" layout-align="space-around center" style="height: 90vh;">
+    <div layout-align="center center">
+        <img src="/favicon.png" style="width: 20vw;"></img>
+    </div>
+    <div layout-align="center center">
+        <div layout="column" layout-align="center start">
+            <h2>Features:</h2>
+            <div layout="row" layout-align="start center" ng-repeat="icon in featureIcons">
+                <md-icon class="material-icons" md-colors="{ color: 'default-accent-500'}" style="margin: 2vh; font-size: 10vh; height: 10vh; width: 10vw; line-height: 10vh;">
+                    {{ icon.icon }}
+                </md-icon>
+                <h3>{{ icon.title }}</h3>
+            </div>
+        </div>
+    </div>
+    <div layout-align="center center">
+        <div layout="column" layout-align="center start">
+            <h2>Suitable for:</h2>
+            <div layout="row" layout-align="start center" ng-repeat="icon in useCaseIcons">
+                <md-icon class="material-icons" md-colors="{ color: 'default-accent-500'}" style="margin: 2vh; font-size: 10vh; height: 10vh; width: 10vw; line-height: 10vh;">
+                    {{ icon.icon }}
+                </md-icon>
+                <h3>{{ icon.title }}</h3>
+            </div>
+        </div>
+    </div>
+</div>

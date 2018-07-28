@@ -1,0 +1,282 @@
+<div class="elements">
+
+    <md-toolbar>
+        <div class="md-toolbar-tools" layout-align="space-between center">
+            <div class="md-toolbar-tools" layout-align="start center">Shadowsocks Hub</div>
+            <md-menu md-offset="0 50">
+                <md-button ng-click="$mdMenu.open()">
+                    <md-icon class="material-icons">person</md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button ng-click="changeUserPassword()">
+                            <md-icon class="material-icons" style="color:#FF6E40;">edit</md-icon>
+                            Change password
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-divider></md-menu-divider>
+                    <md-menu-item>
+                        <md-button ng-click="logout()">
+                            <md-icon class="material-icons" style="color:#FF6E40;">power_settings_new</md-icon>
+                            Log out
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-toolbar>
+
+    <div class="elementDivider">
+        <div ng-if="doesShowElementDivider">
+            <div>
+                <div class="md-toolbar-tools" layout-align="start center">
+                    <md-button class="md-fab md-accent" ng-click="close(displayCache.getNewElementOrder() - 1)">
+                        <md-tooltip md-direction="top">
+                            Back
+                        </md-tooltip>
+                        <md-icon class="material-icons" md-colors="{color: 'primary'}">chevron_left</md-icon>
+                    </md-button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="menu">
+        <div layout="row" ng-if="doesShowMenu" layout-wrap layout-align="center center">
+            <div ng-repeat="menuItem in menu.items track by menuItem.id">
+                <div ng-if="isMenuItemVisible[menuItem.id]">
+                    <md-card style="min-height: 20vh; min-width: 20vw;" layout-align="center center" ng-click="menuClick(menuItem.id, menu.elementOrder)"
+                        md-colors="{background: 'primary-100'}">
+                        <md-card-header>
+                            <md-card-header-text layout-align="center center">
+                                <span class="md-title" translate>{{menuItem.name}}</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accounts">
+        <div layout="row" ng-if="doesShowAccounts" layout-wrap layout-align="center center">
+            <div ng-repeat="account in accounts.items track by account.id">
+                <div ng-if="isAccountVisible[account.id]">
+                    <md-card style="min-height: 20vh; min-width: 20vw;" md-colors="{background: 'primary-100'}">
+                        <md-card-header>
+                            <md-card-header-text layout-align="center center">
+                                <span class="md-title">{{account.port}}</span>
+                                <span class="md-subhead">Created {{account.createdTime | timeago}}</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-content layout="column">
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Host:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{account.node.server.ipAddressOrDomainName}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Port:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{account.port}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Password:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{account.password}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Encryption:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{account.method}}</div>
+                            </div>
+                        </md-card-content>
+                        <md-card-actions layout="column" layout-align="center center">
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showAccountTraffic(account.id, accounts.elementOrder)"
+                                        ng-if="isShowAccountTrafficButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Account Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">equalizer</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(accounts.elementOrder + 1)" ng-if="!isShowAccountTrafficButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Account Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">equalizer</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showAccountQrCode(account.id, accounts.elementOrder)"
+                                        ng-if="isShowAccountQrCodeButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Account QR Code
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">select_all</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(accounts.elementOrder + 1)" ng-if="!isShowAccountQrCodeButtonVisible[account.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Account QR Code
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">select_all</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="traffic">
+        <div ng-if="doesShowTrafficChart" layout-align="center center">
+            <md-card md-colors="{background: 'primary-100'}">
+                <md-card-header>
+                    <md-card-header-text layout-align="center center">
+                    </md-card-header-text>
+                </md-card-header>
+                <md-card-content>
+                    <div flex layout="row" layout-align="center center" style="margin-bottom: 15px;">
+                        <md-radio-group ng-model="$parent.period" ng-change="changeTrafficChartPeriod()" layout="row" layout-align="center center">
+                            <md-radio-button value="hour">Hour</md-radio-button>
+                            <md-radio-button value="day">Day</md-radio-button>
+                            <md-radio-button value="week">Week</md-radio-button>
+                            <md-radio-button value="month">Month</md-radio-button>
+                            <md-radio-button value="quarter">Quarter</md-radio-button>
+                            <md-radio-button value="year">Year</md-radio-button>
+                        </md-radio-group>
+                    </div>
+
+                    <div layout="row" layout-wrap layout-align="center center">
+
+                        <canvas id="line" width="{{getChartSize().line[0]}}" height="{{getChartSize().line[1]}}" class="chart chart-line" chart-data="data"
+                            chart-labels="labels" chart-series="series" chart-options="options">
+                        </canvas>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+
+    <div class="products">
+        <div layout="row" ng-if="doesShowProducts" layout-wrap layout-align="center center">
+            <div ng-repeat="product in products.items track by product.id">
+                <div ng-if="isProductVisible[product.id]">
+                    <md-card style="min-height: 20vh; min-width: 20vw;" md-colors="{background: 'primary-100'}">
+                        <md-card-header>
+                            <md-card-header-text layout-align="center center">
+                                <span class="md-title">{{product.name}}</span>
+                                <span class="md-subhead">Created {{product.createdTime | timeago}}</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-content layout="column">
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Period:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{product.period}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Traffic:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{product.traffic | flow}}</div>
+                            </div>
+                        </md-card-content>
+                        <md-card-actions layout="column" layout-align="center center">
+                            <div layout="row">
+                                <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="createPurchase(product)">
+                                    <md-tooltip md-direction="top">
+                                        Request this product
+                                    </md-tooltip>
+                                    <md-icon class="material-icons" md-colors="{color: 'primary'}">pan_tool</md-icon>
+                                </md-button>
+                            </div>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="purchases">
+        <div layout="row" ng-if="doesShowPurchases" layout-wrap layout-align="center center">
+            <div ng-repeat="purchase in purchases.items track by purchase.id">
+                <div ng-if="isPurchaseVisible[purchase.id]">
+                    <md-card style="min-height: 20vh; min-width: 20vw;" md-colors="{background: 'primary-100'}">
+                        <md-card-header>
+                            <md-card-header-text layout-align="center center">
+                                <span class="md-title">{{purchase.user.email}}</span>
+                                <span class="md-subhead">Created {{purchase.createdTime | timeago}}</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-content layout="column">
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>User:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{purchase.user.email}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Product:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{purchase.product.name}}</div>
+                            </div>
+                            <div layout="row" layout-align="space-between center">
+                                <div translate>Status:</div>
+                                <div style="width: 30px;"></div>
+                                <div>{{purchase.payment.state}}</div>
+                            </div>
+                        </md-card-content>
+                        <md-card-actions layout="column" layout-align="center center">
+                            <div layout="row">
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showPurchaseAccounts(purchase.id, purchases.elementOrder)"
+                                        ng-if="isShowPurchaseAccountButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Request Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">account_balance_wallet</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(purchases.elementOrder + 1)" ng-if="!isShowPurchaseAccountButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Request Accounts
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">account_balance_wallet</md-icon>
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="showPurchaseTraffic(purchase.id, purchases.elementOrder)"
+                                        ng-if="isShowPurchaseTrafficButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Show Request Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" md-colors="{color: 'primary'}">equalizer</md-icon>
+                                    </md-button>
+                                    <md-button class="md-fab md-mini md-accent" style="margin:10px" ng-click="close(purchases.elementOrder + 1)" ng-if="!isShowPurchaseTrafficButtonVisible[purchase.id]">
+                                        <md-tooltip md-direction="top">
+                                            Hide Request Traffic
+                                        </md-tooltip>
+                                        <md-icon class="material-icons" style="color: ghostwhite;">equalizer</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="qrcode">
+        <div layout="row" ng-if="doesShowQrcode" layout-wrap layout-align="center center">
+            <md-card md-colors="{background: 'primary-100'}">
+                <md-card-content>
+                    <div flex layout="row" layout-align="center center">
+                        <qr layout-margin text="qrcodeSsAddress" image="true"></qr>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+</div>
