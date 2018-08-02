@@ -13993,24 +13993,26 @@
 }, function(e, r, t) {
     "use strict";
     var n = t(24), a = t(2)(), s = t(88), u = t(87), o = t(1), i = t(86), c = t(46), p = t(85), d = p.Strategy, f = p.ExtractJwt;
-    global.JWT_SECRET = n.createHash("sha256").update(process.env.JWT_SECRET + "W93Cio30vmbj0W823K9m20s2i@WkwoiK").digest("hex"), 
+    global.RATE_LIMIT = process.env.RATE_LIMIT, global.JWT_SECRET = n.createHash("sha256").update(process.env.JWT_SECRET + "W93Cio30vmbj0W823K9m20s2i@WkwoiK").digest("hex"), 
     global.REFRESH_JWT_SECRET = n.createHash("sha256").update(global.JWT_SECRET + "W93Cio30vmb928EKSOEW!OIWsue02weg220s2i@WkwoiK").digest("hex");
     var l = {
         jwtFromRequest: f.fromAuthHeaderAsBearerToken(),
         secretOrKey: global.JWT_SECRET
     };
-    c.use(new d(l, function(e, r) {
+    if (c.use(new d(l, function(e, r) {
         return r(null, {
             id: e.id,
             role: e.role
         });
-    }));
-    var h = new i({
-        windowMs: 9e5,
-        max: 50,
-        delayMs: 0
-    });
-    a.use(h), a.use(s.json()), a.use(s.urlencoded({
+    })), global.RATE_LIMIT && !isNaN(global.RATE_LIMIT) && !Number.isInteger(global.RATE_LIMIT)) {
+        var h = new i({
+            windowMs: 9e5,
+            max: global.RATE_LIMIT,
+            delayMs: 0
+        });
+        a.use(h);
+    }
+    a.use(s.json()), a.use(s.urlencoded({
         extended: !0
     }));
     var m = {

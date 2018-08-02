@@ -74,6 +74,14 @@ knex migrate:latest --env production
 
     Admininistration and user operations should be intuitive, or feel free to leave feedback otherwise.
 
+## Rate limit
+You may enforce a rate limit by setting the maximum number of requests allowed within 15-minute window from the same ip address. Requests exceeding the limit will be refused with HTTP status code `429 Too Many Requests`. This setting can be done by add the following config to the `.env` file.
+    ```
+    RATE_LIMIT = 50
+    ```
+
+   Change the number to your choice.
+
 ## Bug report, feature request, and feedback
 
 Bug report, feature request, and feedback is welcome. Bugs have a high priority to get addressed. Feature requests and improvement feedback will be considered depending on their popularity and importance.
