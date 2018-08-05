@@ -6,7 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Eggham Carnegie <eggham.carnegie@gmail.com>",
+  "author": {
+    "name": "Eggham Carnegie",
+    "email": "eggham.carnegie@gmail.com"
+  },
   "license": "ISC",
   "dependencies": {
     "angular-chart.js": "^1.1.1",
@@ -37,5 +40,9 @@
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
     "validator": "^9.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shadowsocks/shadowsocks-hub.git"
   }
 }
