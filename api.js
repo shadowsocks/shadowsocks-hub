@@ -9179,7 +9179,7 @@
     })), function(e) {
         return a.apply(this, arguments);
     }), i = (s = c(regeneratorRuntime.mark(function e(r) {
-        var t, n, a, s, u, o, i, c, p, d, m, x, w, v = this;
+        var t, n, a, s, u, o, i, c, p, d, m, w, v, b = this;
         return regeneratorRuntime.wrap(function(e) {
             for (;;) switch (e.prev = e.next) {
               case 0:
@@ -9238,17 +9238,17 @@
                 o = e.sent, i = Array.from(new Set(r.map(function(e) {
                     return e.purchase;
                 }))), c = !0, p = !1, d = void 0, e.prev = 38, m = regeneratorRuntime.mark(function e() {
-                    var t, n, a, s, u, i, c, p, d, f, m, x, b, y, k, I;
+                    var t, n, a, s, u, i, c, p, d, f, m, w, y, k, I, R, E, A;
                     return regeneratorRuntime.wrap(function(e) {
                         for (;;) switch (e.prev = e.next) {
                           case 0:
-                            for (t = w.value, n = r.filter(function(e) {
+                            for (t = v.value, n = r.filter(function(e) {
                                 return e.purchase.id === t.id;
                             }), a = 0, s = !0, u = !1, i = void 0, e.prev = 6, c = function() {
                                 var e = d.value, r = o.filter(function(r) {
                                     return r.accountId === e.id;
                                 });
-                                if (1 === r.length) a += r[0]; else if (r.length > 1) throw new Error("should not come here");
+                                if (1 === r.length) a += r[0].usage; else if (r.length > 1) throw new Error("should not come here");
                             }, p = n[Symbol.iterator](); !(s = (d = p.next()).done); s = !0) c();
                             e.next = 15;
                             break;
@@ -9274,61 +9274,81 @@
 
                           case 23:
                             if (!(g(t.createdTime, t.product.period) || a > t.product.traffic)) {
-                                e.next = 52;
+                                e.next = 68;
                                 break;
                             }
-                            for (f = !0, m = !1, x = void 0, e.prev = 28, b = n[Symbol.iterator](); !(f = (y = b.next()).done); f = !0) k = y.value, 
-                            {
-                                port: k.port
-                            }, {
-                                host: k.node.server.ipAddressOrDomainName,
-                                port: k.node.port,
-                                password: k.node.password
-                            };
-                            e.next = 36;
+                            f = !0, m = !1, w = void 0, e.prev = 28, y = n[Symbol.iterator]();
+
+                          case 30:
+                            if (f = (k = y.next()).done) {
+                                e.next = 46;
+                                break;
+                            }
+                            return I = k.value, R = {
+                                port: I.port
+                            }, E = {
+                                host: I.node.server.ipAddressOrDomainName,
+                                port: I.node.port,
+                                password: I.node.password
+                            }, e.prev = 34, e.next = 37, x.deletePort(I.node.protocol, R, E);
+
+                          case 37:
+                            e.next = 42;
                             break;
 
-                          case 32:
-                            e.prev = 32, e.t1 = e.catch(28), m = !0, x = e.t1;
-
-                          case 36:
-                            e.prev = 36, e.prev = 37, !f && b.return && b.return();
-
                           case 39:
-                            if (e.prev = 39, !m) {
-                                e.next = 42;
-                                break;
-                            }
-                            throw x;
+                            e.prev = 39, e.t1 = e.catch(34), console.error(I.node.name, e.t1.message);
 
                           case 42:
-                            return e.finish(39);
-
                           case 43:
-                            return e.finish(36);
+                            f = !0, e.next = 30;
+                            break;
 
-                          case 44:
-                            return I = n.map(function(e) {
-                                return e.id;
-                            }), e.next = 48, l.deleteTrafficByAccountIds(I);
-
-                          case 48:
-                            return e.next = 50, h.deleteAccountsByIds(I);
-
-                          case 50:
+                          case 46:
                             e.next = 52;
                             break;
 
+                          case 48:
+                            e.prev = 48, e.t2 = e.catch(28), m = !0, w = e.t2;
+
                           case 52:
-                          case 53:
+                            e.prev = 52, e.prev = 53, !f && y.return && y.return();
+
+                          case 55:
+                            if (e.prev = 55, !m) {
+                                e.next = 58;
+                                break;
+                            }
+                            throw w;
+
+                          case 58:
+                            return e.finish(55);
+
+                          case 59:
+                            return e.finish(52);
+
+                          case 60:
+                            return A = n.map(function(e) {
+                                return e.id;
+                            }), e.next = 64, l.deleteTrafficByAccountIds(A);
+
+                          case 64:
+                            return e.next = 66, h.deleteAccountsByIds(A);
+
+                          case 66:
+                            e.next = 68;
+                            break;
+
+                          case 68:
+                          case 69:
                           case "end":
                             return e.stop();
                         }
-                    }, e, v, [ [ 6, 11, 15, 23 ], [ 16, , 18, 22 ], [ 28, 32, 36, 44 ], [ 37, , 39, 43 ] ]);
-                }), x = i[Symbol.iterator]();
+                    }, e, b, [ [ 6, 11, 15, 23 ], [ 16, , 18, 22 ], [ 28, 48, 52, 60 ], [ 34, 39 ], [ 53, , 55, 59 ] ]);
+                }), w = i[Symbol.iterator]();
 
               case 41:
-                if (c = (w = x.next()).done) {
+                if (c = (v = w.next()).done) {
                     e.next = 46;
                     break;
                 }
@@ -9346,7 +9366,7 @@
                 e.prev = 48, e.t2 = e.catch(38), p = !0, d = e.t2;
 
               case 52:
-                e.prev = 52, e.prev = 53, !c && x.return && x.return();
+                e.prev = 52, e.prev = 53, !c && w.return && w.return();
 
               case 55:
                 if (e.prev = 55, !p) {
