@@ -11,6 +11,7 @@ It is a web app for managing shadowsocks users, servers, nodes (a.k.a. exit poin
     git clone https://github.com/shadowsocks/shadowsocks-hub.git
     cd ~/shadowsocks-hub
     npm i
+    sudo npm i -g knex
     ```
 4. Create a MySQL database `sshub`:
     ```
