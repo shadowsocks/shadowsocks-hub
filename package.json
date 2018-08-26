@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-hub",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "A web app for managing shadowsocks servers, nodes, users, accounts, and traffic. It is suitable for internal use, e.g. companies, orgnazations, and among friends etc.",
   "main": "api.js",
   "scripts": {
