@@ -44,7 +44,18 @@ It is a web app for managing shadowsocks users, servers, nodes (a.k.a. exit poin
 
    Shadowsocks Hub uses https for all web traffic. It requires you to set up a digital certificate. You may obtain your digital certificate and key pair from any Certificate Authority (e.g. Let's Encrypt). Then rename the certificate file as `server.cert` and the key file as `server.key`. Finally, copy both `server.cert` and `server.key` to `~/shadowsocks-hub`.   
 
-9. Shadowsocks Hub uses [shadowsocks-restful-api](https://github.com/shadowsocks/shadowsocks-restful-api) to manage shadowsocks node. Install it on every server acting as a shadowsocks node.
+9. Give non-root user permission to use port 80, 443
+
+   Shadowsocks Hub requires listenning to port 80 and 443. The following commands allow a non-root user to use both ports. This is the best practice from security point of view.
+
+   ```
+   sudo apt-get install libcap2-bin
+   sudo setcap cap_net_bind_service=+ep /usr/bin/node
+   ```
+
+
+
+10. Shadowsocks Hub uses [shadowsocks-restful-api](https://github.com/shadowsocks/shadowsocks-restful-api) to manage shadowsocks node. Install it on every server acting as a shadowsocks node.
 
 ## Update
 When you have updated Shadowsocks Hub, run the following commands to update database tables:
@@ -56,10 +67,9 @@ knex migrate:latest --env production
 ## Run
 1. Run Shadowsocks Hub:
     ```
-    cd ~/shadowsocks-hub-api
-    sudo node api.js
+    cd ~/shadowsocks-hub
+    node api.js
     ```
-    Note that root privilege is required in order to listen on port 80 and 443.
 
 2. Visiting Shadowsocks Hub:
 
