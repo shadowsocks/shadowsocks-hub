@@ -4772,12 +4772,15 @@
                         return regeneratorRuntime.wrap(function(e) {
                             for (;;) switch (e.prev = e.next) {
                               case 0:
-                                return e.next = 2, t.delete().from("ss_account").whereIn("id", r);
+                                return e.next = 2, t.delete().from("traffic").whereIn("accountId", r);
 
                               case 2:
-                                return e.next = 4, t.delete().from("account").whereIn("id", r);
+                                return e.next = 4, t.delete().from("ss_account").whereIn("id", r);
 
                               case 4:
+                                return e.next = 6, t.delete().from("account").whereIn("id", r);
+
+                              case 6:
                               case "end":
                                 return e.stop();
                             }
@@ -4789,21 +4792,14 @@
                 }());
 
               case 34:
-                e.next = 42;
+                e.next = 39;
                 break;
 
               case 36:
-                if (e.prev = 36, e.t1 = e.catch(31), "ER_ROW_IS_REFERENCED_2" !== e.t1.code) {
-                    e.next = 40;
-                    break;
-                }
-                throw new Error("ssAccount is referenced");
+                throw e.prev = 36, e.t1 = e.catch(31), e.t1;
 
+              case 39:
               case 40:
-                throw e.t1;
-
-              case 42:
-              case 43:
               case "end":
                 return e.stop();
             }
@@ -10588,19 +10584,12 @@
                 return e.abrupt("return", t.status(204).end());
 
               case 15:
-                if ("ssAccount is referenced" !== e.t0.message) {
-                    e.next = 18;
-                    break;
-                }
-                return e.abrupt("return", t.status(409).end());
-
-              case 18:
                 return e.abrupt("return", t.status(500).send({
                     error: e.t0
                 }));
 
-              case 20:
-              case 21:
+              case 17:
+              case 18:
               case "end":
                 return e.stop();
             }
