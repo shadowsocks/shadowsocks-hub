@@ -12,6 +12,7 @@ It is a web app for managing shadowsocks users, servers, nodes (a.k.a. exit poin
     cd ~/shadowsocks-hub
     npm i
     sudo npm i -g knex
+    sudo npm i -g pm2
     ```
 4. Create a MySQL database `sshub`:
     ```
@@ -60,15 +61,15 @@ It is a web app for managing shadowsocks users, servers, nodes (a.k.a. exit poin
 ## Update
 When you have updated Shadowsocks Hub, run the following commands to update database tables:
 ```
-cd ~/shadowsocks-hub-api
+cd ~/shadowsocks-hub
 knex migrate:latest --env production
 ```
 
 ## Run
-1. Run Shadowsocks Hub:
+1. Run Shadowsocks Hub in background:
     ```
     cd ~/shadowsocks-hub
-    node api.js
+    pm2 start
     ```
 
 2. Visiting Shadowsocks Hub:
@@ -82,6 +83,20 @@ knex migrate:latest --env production
    ![admin_update_profile](https://github.com/shadowsocks/shadowsocks-hub/blob/master/screen_shots/admin_update.png)
 
 4. Run [shadowsocks-restful-api](https://github.com/shadowsocks/shadowsocks-restful-api) on every server acting as a shadowsocks node.
+
+5. Automatic restart
+
+   If you'd like Shadowsocks Hub to automatically restart upon server reboot, run:
+
+    ```
+    pm2 save
+    ```
+
+   In case you want to stop automatic restart, run:
+   
+    ```
+    pm2 cleardump
+    ```
 
 ## Usage
 ### Admin
