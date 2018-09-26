@@ -18,34 +18,27 @@ It is a web app for managing shadowsocks users, servers, nodes (a.k.a. exit poin
     ```
     CREATE DATABASE sshub;
     ```
-5. Create an environment file `.env`:
+5. Edit PM2 config file `~/shadowsocks-hub/ecosystem.config.js`, change the following configurations to your local settings :
     ```
-    cd ~/shadowsocks-hub
-    touch .env
-    ```
-6. Add the following configuration key-value pairs to `.env`:
-    ```
-    JWT_SECRET = 2wk0M@ow094B^&9k3==~o2soejd$sEEo@2(
-
-    DATABASE_HOST = localhost
-    DATABASE_PORT = 3306
-    DATABASE_USER = root
-    DATABASE_PASSWORD = d4f889df22769f54
-    ```
+    JWT_SECRET: '2wk0M@ow094B^&9k3==~o2soejd$sEEo@2(',
+    DATABASE_HOST: 'localhost',
+    DATABASE_PORT: '3306',
+    DATABASE_USER: 'root',
+    DATABASE_PASSWORD: 'd4f889df22769f54',
 
    Change the value of `JWT_SECRET` with a long and random string.  
    Change the values about the MySQL database connection to your local configurations.
 
-7. Initialize database:
+6. Initialize database:
     ```
     cd ~/shadowsocks-hub
     knex migrate:latest --env production
     ```
-8. Set up digital certificate
+7. Set up digital certificate
 
    Shadowsocks Hub uses https for all web traffic. It requires you to set up a digital certificate. You may obtain your digital certificate and key pair from any Certificate Authority (e.g. Let's Encrypt). Then rename the certificate file as `server.cert` and the key file as `server.key`. Finally, copy both `server.cert` and `server.key` to `~/shadowsocks-hub`.   
 
-9. Give non-root user permission to use port 80, 443
+8. Give non-root user permission to use port 80, 443
 
    Shadowsocks Hub requires listenning to port 80 and 443. The following commands allow a non-root user to use both ports. This is the best practice from security point of view.
 
@@ -54,9 +47,7 @@ It is a web app for managing shadowsocks users, servers, nodes (a.k.a. exit poin
    sudo setcap cap_net_bind_service=+ep /usr/bin/node
    ```
 
-
-
-10. Shadowsocks Hub uses [shadowsocks-restful-api](https://github.com/shadowsocks/shadowsocks-restful-api) to manage shadowsocks node. Install it on every server acting as a shadowsocks node.
+9. Shadowsocks Hub uses [shadowsocks-restful-api](https://github.com/shadowsocks/shadowsocks-restful-api) to manage shadowsocks node. Install it on every server acting as a shadowsocks node.
 
 ## Update
 When you have updated Shadowsocks Hub, run the following commands to update database tables:
