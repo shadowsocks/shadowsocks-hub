@@ -17,12 +17,11 @@ node_modules
 # Optional npm cache directory
 .npm
 
-# Application environment
-.env
-
 # CA certificate
-ca.*
 server.*
+
+# environment variable
+.env
 
 # package-lock.json
 package-lock.json

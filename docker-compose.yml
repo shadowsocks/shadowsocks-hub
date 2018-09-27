@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+    db:
+        image: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        environment:
+            - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_DATABASE=sshub
+        volumes:
+            - database:/var/lib/mysql
+        restart: always
+    
+    web:
+        image: sshub/web:0.3.0
+        depends_on:
+            - db
+        environment:
+            - NODE_ENV=production
+            - JWT_SECRET=${CODE_SECRET}
+            - DATABASE_HOST=db
+            - DATABASE_USER=root
+            - DATABASE_PORT=3306
+            - DATABASE_PASSWORD=${MYSQL_PASSWORD}
+        restart: always
+
+    proxy:
+        image: nginx:mainline-alpine
+        volumes:
+            - ./nginx/sshub.conf:/etc/nginx/conf.d/sshub.conf
+            - ./ssl:/etc/ssl
+        restart: always
+        ports:
+            - "80:80"
+            - "443:443"
+
+volumes:
+    database:
