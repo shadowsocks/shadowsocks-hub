@@ -1,4 +1,4 @@
-# Shadowsocks Hub
+# Shadowsocks Hub (v0.3.0)
 It is a web app for managing shadowsocks users, servers, nodes (a.k.a. exit points), products, accounts, and traffic. It is best suitable for companies, organizations, and groups of friends to manage their internal shadowsocks infrastructures. 
 
 ## Installation (Docker)
